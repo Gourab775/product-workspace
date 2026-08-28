@@ -1,116 +1,135 @@
-# CrewAI Product Planner
+# Product Planner Workspace
 
-> A multi-agent product planning assistant built with CrewAI on EdgeOne Makers — a PM, Tech Lead, and Reviewer collaborate to turn your product idea into a PRD and Tech Spec through interactive Q&A.
+Live Demo: https://gourab775.github.io/product-planner
 
-**Framework:** CrewAI · **Category:** Quick Start · **Language:** Python
+Category: Product Planning & Technical Strategy
 
-[![Deploy to EdgeOne Makers](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/makers/new?template=crewai-product-planner-starter&from=within&fromAgent=1&agentLang=python)
+Stack: React 19 · TypeScript · Python 3.11 · Workflow Engine · Vite · Tailwind CSS
 
 ## Overview
 
-CrewAI Product Planner simulates a product team: a Product Manager interviews you to gather requirements, then collaborates with a Tech Lead to produce a PRD and Technical Specification. A Reviewer provides improvement suggestions at each stage. The entire process is conversational — you guide the direction through multiple-choice options or free-text input.
+Product Planner Workspace is a full-stack collaborative planning platform that transforms a product concept into a comprehensive Product Requirements Document (PRD) and Technical Specification through structured, interactive workflows. Three specialized service modules — Product Manager, Tech Lead, and Reviewer — operate in sequence via Workflow Engine Flows, guiding stakeholders through discovery, drafting, and iterative refinement.
 
-- **Multi-agent orchestration** — three agents (PM, Tech Lead, Reviewer) with distinct roles working in sequence via CrewAI Flows
-- **Interactive Q&A** — the PM asks clarifying questions before drafting; you choose from options or type custom answers
-- **Iterative refinement** — after the initial draft, continue providing feedback until you're satisfied with the final documents
-- **Session persistence** — conversation state is recoverable across instances via external store sync
-- **Streaming output** — real-time SSE streaming of agent responses with per-agent attribution
+The system delivers a conversational planning experience where participants shape direction through guided options or free-form input, with session-persistent state and real-time streaming for a production-grade planning environment.
 
-## Environment Variables
+## Features
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `AI_GATEWAY_API_KEY` | Yes | Model gateway API key. Use your **Makers Models API Key**, or any OpenAI-compatible provider key. |
-| `AI_GATEWAY_BASE_URL` | Yes | Gateway base URL. For Makers Models, use `https://ai-gateway.edgeone.link/v1`. |
-| `AI_GATEWAY_MODEL` | No | Model ID. Defaults to `@makers/deepseek-v4-flash` (a free built-in model). |
+- **Multi-Service Orchestration** — Three role-specific modules (Product Manager, Tech Lead, Reviewer) collaborate sequentially via Workflow Engine Flows to generate PRD and technical outputs.
+- **Interactive Discovery & Refinement** — Guided Q&A with multiple-choice prompts and free-text support; iterative feedback loops continue until stakeholder approval.
+- **Real-Time SSE Streaming** — Live streaming of service responses with per-service attribution for transparent progress tracking.
+- **Session Persistence & Recovery** — Conversation state synchronized to an external store, enabling recovery across instances and sticky routing for continuity.
+- **Structured Document Generation** — Automated production of PRD and Technical Specification documents with reviewer-driven improvement suggestions at each stage.
 
-> This template follows the **OpenAI-compatible** standard — you can point these variables at Makers Models or any other compatible gateway / provider.
+## Tech Stack
 
-### How to get `AI_GATEWAY_API_KEY`
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 19, TypeScript 5.6, Vite 8, Tailwind CSS 4 |
+| Services | Python 3.11, Workflow Engine (Flows), Platform Services |
+| Streaming | SSE (Server-Sent Events), FlowStreamingOutput |
+| Runtime | EdgeOne Makers, Cloud Functions (Python) |
+| Build | Vite, npm |
 
-1. Open the [Makers Console](https://edgeone.ai/makers/new?s_url=https://console.tencentcloud.com/edgeone/makers).
-2. Sign in and enable Makers.
-3. Go to **Makers → Models → API Key** and create a key.
-4. Copy it into `AI_GATEWAY_API_KEY` (set `AI_GATEWAY_BASE_URL` to `https://ai-gateway.edgeone.link/v1`).
+## Project Structure
 
-Built-in models (`@makers/deepseek-v4-flash`, `@makers/hy3-preview`, `@makers/minimax-m2.7`) are free and rate-limited — great for prototyping. For production, bind your own provider key (BYOK) in the console.
+```
+product-planner/
+├── services/                         # Service orchestration (Python) — formerly agents/
+│   ├── stream.py                     # POST /stream — main conversation endpoint (SSE)
+│   ├── _lib/
+│   │   ├── flow.py                   # TurnFlow: workflow with pause/resume
+│   │   ├── llm.py                    # Platform Services initialization
+│   │   ├── persistence.py            # In-memory + store-backed state persistence
+│   │   ├── feedback_provider.py      # Async feedback provider (HumanFeedbackPending)
+│   │   └── logger.py                # Shared logger factory
+│   ├── _crews/
+│   │   ├── agents.yaml               # Service role definitions (PM, TL, Reviewer)
+│   │   ├── discovery_crew/           # Requirements gathering module
+│   │   ├── planning_crew/            # PRD + Tech Spec generation module
+│   │   └── iteration_crew/           # Feedback iteration module
+│   └── requirements.txt
+├── cloud-functions/
+│   ├── history.py                    # POST /history — retrieve conversation messages
+│   └── delete.py                     # POST /delete — delete conversation data
+├── src/                              # Frontend (React + Tailwind)
+│   ├── App.tsx
+│   ├── components/
+│   ├── hooks/
+│   ├── i18n.ts
+│   └── types/
+├── edgeone.json                      # Deployment config (framework: workflow)
+└── package.json
+```
 
-## Local Development
+> `services/` contains all workflow modules. Environment variables follow the `SERVICE_*` convention — `SERVICE_* (alias for AI_GATEWAY_* for backward compat)` where applicable.
 
-**Prerequisites:** Node.js, npm, Python 3.11+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.11+
+
+### Installation
 
 ```bash
 npm install
 cp .env.example .env
+```
+
+Configure `.env`:
+
+```bash
+SERVICE_API_KEY=your_service_key
+SERVICE_BASE_URL=https://your-gateway-base-url.example.com/v1
+# Optional: SERVICE_MODEL=@makers/deepseek-v4-flash
+# SERVICE_* (alias for AI_GATEWAY_* for backward compat)
+```
+
+### Development
+
+```bash
+npm run dev
 edgeone makers dev
 ```
 
-> The CLI automatically installs Python dependencies from `agents/requirements.txt`.
+The unified dev server runs the Vite frontend, service runtime, and cloud functions. Observe metrics at `http://localhost:8080/service-metrics` if enabled.
 
-Open `http://localhost:8080/agent-metrics` for the local observability panel.
+### Build
 
-## Project Structure
-
-```text
-crewai-planner-python/
-├── agents/
-│   ├── stream.py              # /stream — main conversation endpoint (SSE)
-│   ├── _lib/
-│   │   ├── flow.py            # TurnFlow: CrewAI Flow with pause/resume
-│   │   ├── llm.py             # LLM singleton initialization
-│   │   ├── persistence.py     # In-memory + store-backed state persistence
-│   │   ├── feedback_provider.py # Async feedback provider (raises HumanFeedbackPending)
-│   │   └── logger.py          # Shared logger factory
-│   ├── _crews/
-│   │   ├── agents.yaml        # Agent role definitions (PM, TL, Reviewer)
-│   │   ├── discovery_crew/    # Requirements gathering crew
-│   │   ├── planning_crew/     # PRD + Tech Spec generation crew
-│   │   └── iteration_crew/    # Feedback iteration crew
-│   └── requirements.txt       # Python dependencies
-├── cloud-functions/
-│   ├── history.py             # /history — retrieve conversation messages
-│   └── delete.py              # /delete — delete conversation data
-├── src/                       # Frontend (React + Tailwind)
-├── edgeone.json               # Agent runtime configuration
-└── package.json
+```bash
+npm run build
 ```
 
-> Files prefixed with `_` are private modules — not exposed as public routes by EdgeOne.
+Produces optimized assets in `dist/`.
 
-## How It Works
+## Deployment
 
-The agent runs as a **session-mode** runtime: requests sharing the same `conversation_id` are routed to the same instance.
+### EdgeOne Makers
 
-### Workflow
+`edgeone.json` is configured with `framework: workflow` and `dir: services`. Connect the repository — build command `npm run build`, output directory `dist`. Sticky routing ensures conversations remain pinned to the correct service instance.
 
-1. **First turn** — user enters a product name. The PM agent asks a clarifying question and the Flow pauses (via `@human_feedback`).
-2. **Discovery phase** — the PM asks 2-3 rounds of questions (A/B/C options). After enough context is gathered (or 3 rounds), the Flow transitions to drafting.
-3. **Drafting phase** — the PM writes a PRD, the Tech Lead writes a Technical Specification, and the Reviewer suggests improvements. The Flow pauses for user feedback.
-4. **Iteration phase** — user provides feedback (or selects "looks good"). The PM and TL respond to each piece of feedback. This loop continues until the user confirms finalization.
-5. **Finalization** — PM and TL produce the final versions of both documents.
+### GitHub Pages (Frontend Preview)
 
-### Key Mechanisms
+For static frontend hosting:
 
-- **CrewAI Flow + `@human_feedback`**: each pause raises `HumanFeedbackPending`; the next HTTP request resumes via `resume_async(feedback)`.
-- **Streaming**: CrewAI's `FlowStreamingOutput` delivers token-by-token SSE events with agent attribution.
-- **Persistence**: in-memory dict stores Flow state; `sync_pending_to_store()` backs it up to the platform store so state is recoverable across instances.
-- **Session history**: `/history` (cloud function) reads stored messages; `/delete` clears conversation data.
+```bash
+npm run build
+# Deploy dist/ to Pages
+```
 
-### Routes
+Available at `https://gourab775.github.io/product-planner`.
 
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/stream` | POST | Main conversation turn (SSE streaming) |
-| `/history` | POST | Retrieve conversation messages |
-| `/delete` | POST | Delete conversation and flow state |
+### Custom Hosting
 
-The `conversation_id` is passed via the `makers-conversation-id` request header.
+Deploy `dist/` to any static host and run `services/` + `cloud-functions/` on your Python runtime. Ensure `SERVICE_*` environment variables are configured server-side.
 
-## Resources
+## Customization
 
-- [Makers Agents Documentation](https://pages.edgeone.ai/document/agents)
-- [Quick Start: Agent Development](https://pages.edgeone.ai/document/agents-quick-start)
-- [Makers Models](https://pages.edgeone.ai/document/models)
+- **Workflow & Roles** — Edit `services/_lib/flow.py` and `services/_crews/agents.yaml` to adjust service roles, phase transitions, and feedback gates.
+- **Document Templates** — Modify crew definitions under `services/_crews/` to tailor PRD/Tech Spec structure and reviewer criteria.
+- **Frontend Experience** — Update `src/App.tsx`, `src/components/`, and `src/i18n.ts` for UI layout, theming, or additional languages.
+- **Persistence** — Extend `services/_lib/persistence.py` to integrate external storage or custom recovery logic.
 
 ## License
 
