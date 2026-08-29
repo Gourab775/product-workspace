@@ -1,6 +1,6 @@
 ﻿# Product Planner Workspace
 
-Live Demo: https://product-planner-vert.vercel.app
+Live Demo: https://product-workspace.vercel.app
 
 Category: Product Planning & Technical Strategy
 
@@ -118,7 +118,7 @@ npm run build
 # Deploy dist/ to Pages
 ```
 
-Available at `https://product-planner-vert.vercel.app`.
+Available at `https://product-workspace.vercel.app`.
 
 ### Custom Hosting
 
