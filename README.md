@@ -1,24 +1,24 @@
-# Product Planner Workspace
+﻿# Product Planner Workspace
 
-Live Demo: https://gourab775.github.io/product-planner
+Live Demo: https://product-planner-vert.vercel.app
 
 Category: Product Planning & Technical Strategy
 
-Stack: React 19 · TypeScript · Python 3.11 · Workflow Engine · Vite · Tailwind CSS
+Stack: React 19 Â· TypeScript Â· Python 3.11 Â· Workflow Engine Â· Vite Â· Tailwind CSS
 
 ## Overview
 
-Product Planner Workspace is a full-stack collaborative planning platform that transforms a product concept into a comprehensive Product Requirements Document (PRD) and Technical Specification through structured, interactive workflows. Three specialized service modules — Product Manager, Tech Lead, and Reviewer — operate in sequence via Workflow Engine Flows, guiding stakeholders through discovery, drafting, and iterative refinement.
+Product Planner Workspace is a full-stack collaborative planning platform that transforms a product concept into a comprehensive Product Requirements Document (PRD) and Technical Specification through structured, interactive workflows. Three specialized service modules â€” Product Manager, Tech Lead, and Reviewer â€” operate in sequence via Workflow Engine Flows, guiding stakeholders through discovery, drafting, and iterative refinement.
 
 The system delivers a conversational planning experience where participants shape direction through guided options or free-form input, with session-persistent state and real-time streaming for a production-grade planning environment.
 
 ## Features
 
-- **Multi-Service Orchestration** — Three role-specific modules (Product Manager, Tech Lead, Reviewer) collaborate sequentially via Workflow Engine Flows to generate PRD and technical outputs.
-- **Interactive Discovery & Refinement** — Guided Q&A with multiple-choice prompts and free-text support; iterative feedback loops continue until stakeholder approval.
-- **Real-Time SSE Streaming** — Live streaming of service responses with per-service attribution for transparent progress tracking.
-- **Session Persistence & Recovery** — Conversation state synchronized to an external store, enabling recovery across instances and sticky routing for continuity.
-- **Structured Document Generation** — Automated production of PRD and Technical Specification documents with reviewer-driven improvement suggestions at each stage.
+- **Multi-Service Orchestration** â€” Three role-specific modules (Product Manager, Tech Lead, Reviewer) collaborate sequentially via Workflow Engine Flows to generate PRD and technical outputs.
+- **Interactive Discovery & Refinement** â€” Guided Q&A with multiple-choice prompts and free-text support; iterative feedback loops continue until stakeholder approval.
+- **Real-Time SSE Streaming** â€” Live streaming of service responses with per-service attribution for transparent progress tracking.
+- **Session Persistence & Recovery** â€” Conversation state synchronized to an external store, enabling recovery across instances and sticky routing for continuity.
+- **Structured Document Generation** â€” Automated production of PRD and Technical Specification documents with reviewer-driven improvement suggestions at each stage.
 
 ## Tech Stack
 
@@ -34,34 +34,34 @@ The system delivers a conversational planning experience where participants shap
 
 ```
 product-planner/
-├── services/                         # Service orchestration (Python) — formerly agents/
-│   ├── stream.py                     # POST /stream — main conversation endpoint (SSE)
-│   ├── _lib/
-│   │   ├── flow.py                   # TurnFlow: workflow with pause/resume
-│   │   ├── llm.py                    # Platform Services initialization
-│   │   ├── persistence.py            # In-memory + store-backed state persistence
-│   │   ├── feedback_provider.py      # Async feedback provider (HumanFeedbackPending)
-│   │   └── logger.py                # Shared logger factory
-│   ├── _crews/
-│   │   ├── agents.yaml               # Service role definitions (PM, TL, Reviewer)
-│   │   ├── discovery_crew/           # Requirements gathering module
-│   │   ├── planning_crew/            # PRD + Tech Spec generation module
-│   │   └── iteration_crew/           # Feedback iteration module
-│   └── requirements.txt
-├── cloud-functions/
-│   ├── history.py                    # POST /history — retrieve conversation messages
-│   └── delete.py                     # POST /delete — delete conversation data
-├── src/                              # Frontend (React + Tailwind)
-│   ├── App.tsx
-│   ├── components/
-│   ├── hooks/
-│   ├── i18n.ts
-│   └── types/
-├── edgeone.json                      # Deployment config (framework: workflow)
-└── package.json
+â”œâ”€â”€ services/                         # Service orchestration (Python) â€” formerly agents/
+â”‚   â”œâ”€â”€ stream.py                     # POST /stream â€” main conversation endpoint (SSE)
+â”‚   â”œâ”€â”€ _lib/
+â”‚   â”‚   â”œâ”€â”€ flow.py                   # TurnFlow: workflow with pause/resume
+â”‚   â”‚   â”œâ”€â”€ llm.py                    # Platform Services initialization
+â”‚   â”‚   â”œâ”€â”€ persistence.py            # In-memory + store-backed state persistence
+â”‚   â”‚   â”œâ”€â”€ feedback_provider.py      # Async feedback provider (HumanFeedbackPending)
+â”‚   â”‚   â””â”€â”€ logger.py                # Shared logger factory
+â”‚   â”œâ”€â”€ _crews/
+â”‚   â”‚   â”œâ”€â”€ agents.yaml               # Service role definitions (PM, TL, Reviewer)
+â”‚   â”‚   â”œâ”€â”€ discovery_crew/           # Requirements gathering module
+â”‚   â”‚   â”œâ”€â”€ planning_crew/            # PRD + Tech Spec generation module
+â”‚   â”‚   â””â”€â”€ iteration_crew/           # Feedback iteration module
+â”‚   â””â”€â”€ requirements.txt
+â”œâ”€â”€ cloud-functions/
+â”‚   â”œâ”€â”€ history.py                    # POST /history â€” retrieve conversation messages
+â”‚   â””â”€â”€ delete.py                     # POST /delete â€” delete conversation data
+â”œâ”€â”€ src/                              # Frontend (React + Tailwind)
+â”‚   â”œâ”€â”€ App.tsx
+â”‚   â”œâ”€â”€ components/
+â”‚   â”œâ”€â”€ hooks/
+â”‚   â”œâ”€â”€ i18n.ts
+â”‚   â””â”€â”€ types/
+â”œâ”€â”€ edgeone.json                      # Deployment config (framework: workflow)
+â””â”€â”€ package.json
 ```
 
-> `services/` contains all workflow modules. Environment variables follow the `SERVICE_*` convention — `SERVICE_* (alias for AI_GATEWAY_* for backward compat)` where applicable.
+> `services/` contains all workflow modules. Environment variables follow the `SERVICE_*` convention â€” `SERVICE_* (alias for AI_GATEWAY_* for backward compat)` where applicable.
 
 ## Getting Started
 
@@ -107,7 +107,7 @@ Produces optimized assets in `dist/`.
 
 ### EdgeOne Makers
 
-`edgeone.json` is configured with `framework: workflow` and `dir: services`. Connect the repository — build command `npm run build`, output directory `dist`. Sticky routing ensures conversations remain pinned to the correct service instance.
+`edgeone.json` is configured with `framework: workflow` and `dir: services`. Connect the repository â€” build command `npm run build`, output directory `dist`. Sticky routing ensures conversations remain pinned to the correct service instance.
 
 ### GitHub Pages (Frontend Preview)
 
@@ -118,7 +118,7 @@ npm run build
 # Deploy dist/ to Pages
 ```
 
-Available at `https://gourab775.github.io/product-planner`.
+Available at `https://product-planner-vert.vercel.app`.
 
 ### Custom Hosting
 
@@ -126,10 +126,10 @@ Deploy `dist/` to any static host and run `services/` + `cloud-functions/` on yo
 
 ## Customization
 
-- **Workflow & Roles** — Edit `services/_lib/flow.py` and `services/_crews/agents.yaml` to adjust service roles, phase transitions, and feedback gates.
-- **Document Templates** — Modify crew definitions under `services/_crews/` to tailor PRD/Tech Spec structure and reviewer criteria.
-- **Frontend Experience** — Update `src/App.tsx`, `src/components/`, and `src/i18n.ts` for UI layout, theming, or additional languages.
-- **Persistence** — Extend `services/_lib/persistence.py` to integrate external storage or custom recovery logic.
+- **Workflow & Roles** â€” Edit `services/_lib/flow.py` and `services/_crews/agents.yaml` to adjust service roles, phase transitions, and feedback gates.
+- **Document Templates** â€” Modify crew definitions under `services/_crews/` to tailor PRD/Tech Spec structure and reviewer criteria.
+- **Frontend Experience** â€” Update `src/App.tsx`, `src/components/`, and `src/i18n.ts` for UI layout, theming, or additional languages.
+- **Persistence** â€” Extend `services/_lib/persistence.py` to integrate external storage or custom recovery logic.
 
 ## License
 
