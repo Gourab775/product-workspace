@@ -1,4 +1,4 @@
-﻿# Product Planner Workspace
+# Product Planner Workspace
 
 Live Demo: https://product-workspace-gourab-neogi.vercel.app
 

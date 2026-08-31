@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { t, getLang } from '../i18n';
+import { t } from '../i18n';
 import type { HistoryItem } from '../hooks/useSSE';
 
 function getDeployUrl() {
@@ -28,13 +28,12 @@ function formatRelativeTime(timestamp: number): string {
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  const zh = getLang() === 'zh';
 
-  if (minutes < 1) return zh ? '刚刚' : 'just now';
-  if (minutes < 60) return zh ? `${minutes} 分钟前` : `${minutes}m ago`;
-  if (hours < 24) return zh ? `${hours} 小时前` : `${hours}h ago`;
-  if (days < 7) return zh ? `${days} 天前` : `${days}d ago`;
-  return new Date(timestamp).toLocaleDateString(zh ? 'zh-CN' : 'en-US');
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 7) return `${days}d ago`;
+  return new Date(timestamp).toLocaleDateString('en-US');
 }
 
 /**

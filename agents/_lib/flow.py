@@ -150,7 +150,7 @@ class TurnFlow(Flow[TurnState]):
         # Update chat history.
         if user_msg:
             history_entry = f"\nBoss: {user_msg}\nPM: {pm_response}"
-            if tl_response and tl_response.lower() not in ("n/a", "无补充"):
+            if tl_response and tl_response.lower() not in ("n/a", "no supplement"):
                 history_entry += f"\nTL: {tl_response}"
             s.chat_history = (s.chat_history + history_entry).strip()
 
@@ -162,7 +162,7 @@ class TurnFlow(Flow[TurnState]):
         feedback = ""
         if self.last_human_feedback:
             feedback = self.last_human_feedback.feedback or ""
-        if any(k in feedback for k in ("确认完成", "finalize", "looks good")):
+        if any(k in feedback.lower() for k in ("finalize", "looks good")):
             return "finalize"
         return "continue_iterate"
 

@@ -171,7 +171,7 @@ async def handler(context):
 
             # ── Parse options: try from last agent backward ──
             # Skip options if this was a finalize request.
-            is_finalize = any(k in user_message for k in ("确认完成", "finalize", "looks good"))
+            is_finalize = any(k in user_message.lower() for k in ("finalize", "looks good"))
             if not is_finalize:
                 options = None
                 for content in reversed(agent_contents):
